@@ -5,7 +5,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int opcao;
         do {
-            System.out.println("=== Menu Principal ===");
+            System.out.println("\n=== Menu Principal ===");
             System.out.println("1. Entrar Despesa");
             System.out.println("2. Anotar Pagamento");
             System.out.println("3. Listar Despesas em Aberto no período");
@@ -46,3 +46,4 @@ public class Main {
         scanner.close();
     }
 }
+
