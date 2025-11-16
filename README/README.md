@@ -32,3 +32,46 @@ O menu inicial apresenta as principais opções, onde cada escolha imprime uma m
 - Menu principal implementado com mensagens simples para cada opção.
 - Classes básicas criadas para representar as principais entidades do sistema.
 - Estrutura inicial do projeto organizada com pastas para código-fonte e documentação.
+
+## versão 0.0.1 – separação de prioridades, POC e projeção do MVP
+
+## 1. Separação de Prioridades
+
+### Prioridade Alta (MVP)
+- Cadastro de despesas
+- Listagem de despesas
+- Persistência (arquivo JSON ou txt)
+- Cálculo total de despesas
+
+### Prioridade Média
+- Relatórios detalhados
+- Filtros avançados
+- Interface amigável
+
+### Prioridade Baixa
+- Exportação PDF/Excel
+- Temas e personalização
+- Integrações externas
+
+---
+
+## 2. POC – Proof of Concept
+A POC valida se o sistema de despesas consegue:
+- Criar um objeto Despesa
+- Armazenar despesas em uma lista
+- Salvar e carregar dados de forma simples
+- Exibir despesas no console
+
+A POC serve apenas para testar o conceito, sem preocupação com interface ou performance.
+
+---
+
+## 3. MVP – Minimum Viable Product
+O MVP terá:
+- Classes principais (Despesa, ControleDespesas)
+- Métodos essenciais (adicionar, listar, somar)
+- Persistência simples (arquivo)
+- Menu básico no terminal
+- Fluxo funcional do usuário
+
+Objetivo: demonstrar o funcionamento básico do sistema.
