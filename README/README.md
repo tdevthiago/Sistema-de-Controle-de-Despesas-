@@ -75,3 +75,265 @@ O MVP terá:
 - Fluxo funcional do usuário
 
 Objetivo: demonstrar o funcionamento básico do sistema.
+
+## terceiro commit 0.0.3 
++----------------------+
+|      Pagavel (I)     |
++----------------------+
+| +registrarPagamento()|
+| +estaPaga()          |
++----------------------+
+
+            ▲
+            |
++-------------------------------+
+|       Despesa (abstract)      |
++-------------------------------+
+| -id:int                       |
+| -descricao:String             |
+| -valor:double                 |
+| -vencimento:LocalDate        |
+| -tipo:TipoDespesa             |
+| -pagamentos:List<Pagamento>   |
+| #contador:int (static)        |
++-------------------------------+
+| +calcularSaldo():double       |
+| +estaPaga():boolean (override)|
+| +adicionarPagamento()         |
++-------------------------------+
+            ▲         ▲         ▲
+            |         |         |
++-----------+---+ +---+---------+---+
+| Transporte | | Eventual       | | Superfluo |
++-----------+---+ +---------------+ +-----------+
+| +regras...    | | +regras...     | | +regras... |
++---------------+ +-----------------+ +-----------+
+
++--------------------------+
+|      Pagamento          |
++--------------------------+
+| -data:LocalDate         |
+| -valor:double           |
++--------------------------+
+
++--------------------------+
+|      TipoDespesa        |
++--------------------------+
+| -id:int                 |
+| -nome:String            |
++--------------------------+
+
++--------------------------+
+|      Usuario            |
++--------------------------+
+| -id:int                 |
+| -login:String           |
+| -senhaCript:String      |
++--------------------------+
+| +criptografarSenha()    |
++--------------------------+
+
++--------------------------------------+
+|      ControleDespesas               |
++--------------------------------------+
+| +adicionarDespesa()                  |
+| +listarPagas()                       |
+| +listarAbertas()                     |
+| +salvarEmArquivo()                   |
+| +lerArquivo()                        |
++--------------------------------------+
+
++--------------------------------------+
+|      UsuarioManager                  |
++--------------------------------------+
+| +cadastrarUsuario()                  |
+| +listarUsuarios()                    |
+| +editarUsuario()                     |
+| +salvarArquivo()                     |
++--------------------------------------+
+
++--------------------------------------+
+|      TipoDespesaManager              |
++--------------------------------------+
+| +cadastrarTipo()                     |
+| +listarTipos()                       |
+| +editarTipo()                        |
+| +excluirTipo()                       |
++--------------------------------------+
+
+## explicação dos codigos
+# 2. Classes do Sistema (explicação detalhada)
+# 2.1 – Classe Abstrata Despesa
+
+Representa qualquer despesa cadastrada no sistema.
+
+Atributos
+
+int id
+
+String descricao
+
+double valor
+
+LocalDate vencimento
+
+String categoria
+
+boolean paga
+
+double valorPago
+
+LocalDate dataPagamento
+
+static int contadorDespesas
+
+Métodos
+
+Construtor sobrecarregado:
+
+Despesa(String descricao, double valor)
+
+Despesa(String descricao, double valor, LocalDate vencimento)
+
+pagar(double valor, LocalDate data)
+
+isPaga()
+
+toString() sobrescrito
+
+Métodos estáticos:
+
+getTotalDespesasCriadas()
+
+Regras
+
+Não pode ser instanciada diretamente.
+
+Subclasses herdam todos os atributos.
+
+# 2.2 – Subclasses de Despesa (Herança)
+
+Cada categoria específica herda de Despesa.
+
+Classe Transporte
+
+Sobrescreve toString()
+
+Pode ter regras adicionais (ex.: custo por km)
+
+Classe Alimentacao
+
+Pode ter validação de alimentação diária
+
+Classe Superfluo
+
+Pode aplicar uma regra de alerta caso valor ultrapasse limite
+
+Classe Eventual
+
+Pode indicar gastos não recorrentes
+
+# 2.3 – Classe Pagamento
+Atributos:
+
+int idDespesa
+
+LocalDate dataPagamento
+
+double valorPago
+
+Documenta a conciliação de pagamento.
+
+# 2.4 – Classe Usuario
+Atributos:
+
+String login
+
+String senhaCriptografada
+
+Métodos:
+
+setSenha(String senha) → criptografa e salva
+
+autenticar(String senhaDigitada)
+
+# 3. Interfaces
+Interface Pagavel
+
+Todas as classes que podem receber pagamento devem implementá-la.
+
+public interface Pagavel {
+    void registrarPagamento(double valor, LocalDate data);
+}
+
+
+As classes concretas (como Transporte, Alimentação etc.) implementam essa interface, permitindo polimorfismo.
+
+# 4. Polimorfismo Aplicado
+
+O sistema permite que diferentes tipos de despesas sejam manipuladas como o tipo pai:
+
+Despesa d = new Alimentacao(...);
+Despesa x = new Transporte(...);
+
+
+Ou usando a interface:
+
+Pagavel p = new Superfluo(...);
+p.registrarPagamento(100, LocalDate.now());
+
+# 5. Métodos e Atributos Estáticos
+Exemplos:
+
+Despesa.contadorDespesas
+Conta quantas despesas foram criadas no sistema.
+
+Criptografia.gerarHash(String texto)
+Método utilitário para gerar criptografia SHA-256.
+
+# 6. Criptografia de Senhas
+
+Implementada na classe Criptografia.java, usando SHA-256.
+
+Fluxo:
+
+Usuário digita senha
+
+Sistema transforma senha em HASH
+
+HASH é salvo em usuarios.txt
+
+Na autenticação, compara o HASH da senha digitada com o HASH armazenado
+
+Isso garante segurança mesmo usando arquivos TXT.
+
+# 7. Persistência em Arquivos TXT
+
+Todos os dados são gravados em /data/.
+
+usuarios.txt
+login;senhaCriptografada
+
+despesas.txt
+id;descricao;valor;vencimento;categoria;paga;valorPago;dataPagamento
+
+tipos.txt
+Transporte
+Alimentacao
+Superfluo
+Eventual
+
+
+Para ler e escrever arquivos, o sistema usa a classe:
+
+ArquivoUtils
+
+
+com métodos como:
+
+lerArquivo(String caminho)
+
+salvarLinha(String caminho, String texto)
+
+sobrescreverArquivo(String caminho, List<String> linhas)
+
